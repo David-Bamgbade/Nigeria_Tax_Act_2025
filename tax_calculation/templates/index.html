@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nigeria Tax Calculator 2025</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Nigeria Tax Calculator</h1>
+            <p>Based on the Nigeria Tax Act, 2025</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-link active" onclick="openTab(event, 'pit-calculator')">Personal Income Tax</button>
+            <button class="tab-link" onclick="openTab(event, 'cit-calculator')">Company Income Tax</button>
+        </div>
+
+        <!-- Personal Income Tax Calculator -->
+        <div id="pit-calculator" class="tab-content active">
+            <form id="pit-form">
+                <fieldset>
+                    <legend>Annual Income (NGN)</legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="employment_income">Employment Income <span class="info-icon" data-tooltip="Total annual earnings from employment. As per Sec. 4(2)(a), this includes salaries, wages, fees, allowances, bonuses, premiums, and other benefits given by an employer.">ⓘ</span></label>
+                            <input type="number" id="employment_income" name="employment_income" placeholder="e.g., 15000000" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="business_profit">Business Profit <span class="info-icon" data-tooltip="Net profit from any trade, business, profession, or vocation you operate for the year (Sec. 4(1)(a)).">ⓘ</span></label>
+                            <input type="number" id="business_profit" name="business_profit" placeholder="e.g., 5000000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="investment_income">Investment Income <span class="info-icon" data-tooltip="Income from dividends, interest on savings, or rent received from properties (Sec. 4(1)(b) & (c)).">ⓘ</span></label>
+                            <input type="number" id="investment_income" name="investment_income" placeholder="e.g., 250000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="other_income">Other Income <span class="info-icon" data-tooltip="Includes income from sources like prizes, winnings, honoraria, grants, and awards (Sec. 4(1)(h)).">ⓘ</span></label>
+                            <input type="number" id="other_income" name="other_income" placeholder="e.g., 100000" value="0">
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Annual Deductions (NGN)</legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="pension_contribution">Pension Contribution <span class="info-icon" data-tooltip="Your total contribution to a fund approved under the Pension Reform Act. This is a fully deductible expense (Sec. 30(2)(a)(iii)).">ⓘ</span></label>
+                            <input type="number" id="pension_contribution" name="pension_contribution" placeholder="e.g., 1200000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="nhf_contribution">NHF Contribution <span class="info-icon" data-tooltip="Your total contribution to the National Housing Fund (NHF). This is an allowable deduction (Sec. 30(2)(a)(i)).">ⓘ</span></label>
+                            <input type="number" id="nhf_contribution" name="nhf_contribution" placeholder="e.g., 375000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="nhis_contribution">NHIS Contribution <span class="info-icon" data-tooltip="Your total contribution to the National Health Insurance Scheme (NHIS). This is an allowable deduction (Sec. 30(2)(a)(ii)).">ⓘ</span></label>
+                            <input type="number" id="nhis_contribution" name="nhis_contribution" placeholder="e.g., 200000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="life_insurance_premium">Life Insurance Premium <span class="info-icon" data-tooltip="The annual premium paid for an insurance policy on your life or the life of your spouse. This is an allowable deduction (Sec. 30(2)(a)(v)).">ⓘ</span></label>
+                            <input type="number" id="life_insurance_premium" name="life_insurance_premium" placeholder="e.g., 150000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="mortgage_interest">Mortgage Interest <span class="info-icon" data-tooltip="The interest paid on a loan for developing an owner-occupied residential house (Sec. 30(2)(a)(iv)).">ⓘ</span></label>
+                            <input type="number" id="mortgage_interest" name="mortgage_interest" placeholder="e.g., 400000" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="annual_rent_paid">Annual Rent Paid <span class="info-icon" data-tooltip="As per Sec. 30(2)(a)(vi), a Rent Relief is granted. It is 20% of the annual rent paid, but is capped at a maximum deduction of ₦500,000 per year, whichever is lower.">ⓘ</span></label>
+                            <input type="number" id="annual_rent_paid" name="annual_rent_paid" placeholder="e.g., 3000000" value="0">
+                        </div>
+                    </div>
+                </fieldset>
+                <button type="submit" class="calculate-btn">Calculate PIT</button>
+            </form>
+        </div>
+
+        <!-- Company Income Tax Calculator -->
+        <div id="cit-calculator" class="tab-content">
+            <form id="cit-form">
+                <fieldset>
+                    <legend>Company Financials (NGN)</legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="turnover">Annual Gross Turnover <span class="info-icon" data-tooltip="The total revenue a company generates from its sales and services during the year, before subtracting any costs or expenses. This is used to determine the company's size.">ⓘ</span></label>
+                            <input type="number" id="turnover" name="turnover" placeholder="e.g., 45000000" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="assessable_profit">Annual Assessable Profit <span class="info-icon" data-tooltip="The company's profit on which the tax rate is applied. This is calculated according to the rules in the Tax Act (e.g., after deducting allowable business expenses).">ⓘ</span></label>
+                            <input type="number" id="assessable_profit" name="assessable_profit" placeholder="e.g., 8000000" required>
+                        </div>
+                         <div class="form-group">
+                            <label for="fixed_assets">Total Fixed Assets Value <span class="info-icon" data-tooltip="The book value of all fixed assets of the company. This is used along with turnover to determine if a company qualifies as 'Small'.">ⓘ</span></label>
+                            <input type="number" id="fixed_assets" name="fixed_assets" placeholder="e.g., 100000000" required>
+                        </div>
+                        <div class="form-group">
+                             <label for="is_professional_services">Is company in professional services? <span class="info-icon" data-tooltip="According to Sec. 202, companies providing professional services (e.g., consulting, legal, accounting) cannot be classified as 'Small', regardless of turnover or assets.">ⓘ</span></label>
+                             <select id="is_professional_services" name="is_professional_services">
+                                 <option value="0">No</option>
+                                 <option value="1">Yes</option>
+                             </select>
+                        </div>
+                    </div>
+                </fieldset>
+                <button type="submit" class="calculate-btn">Calculate CIT</button>
+            </form>
+        </div>
+
+        <div id="results-area" class="hidden">
+            <div class="loader-container"><div class="loader"></div></div>
+            <div id="results-content"></div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

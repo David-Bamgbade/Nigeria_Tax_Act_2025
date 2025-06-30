@@ -6,14 +6,18 @@
       "use": "@vercel/static"
     },
     {
-      "src": "app.py",
+      "src": "api/app.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "app.py"
+      "src": "/calculate_pit",
+      "dest": "api/app.py"
+    },
+    {
+      "src": "/calculate_cit",
+      "dest": "api/app.py"
     },
     {
       "src": "/(.*)",

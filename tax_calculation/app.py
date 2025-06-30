@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 
 # --- Initialize Flask App ---
-app = Flask(__name__, static_folder="static")
+app = Flask(__name__, static_folder="public")
 
 # --- CONSTANTS from the "Nigeria Tax Act, 2025" ---
 

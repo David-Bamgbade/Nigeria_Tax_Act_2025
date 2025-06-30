@@ -12,11 +12,7 @@
   ],
   "routes": [
     {
-      "src": "/calculate_pit",
-      "dest": "app.py"
-    },
-    {
-      "src": "/calculate_cit",
+      "src": "/api/(.*)",
       "dest": "app.py"
     },
     {

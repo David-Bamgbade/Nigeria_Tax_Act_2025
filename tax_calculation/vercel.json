@@ -1,23 +1,18 @@
-{
-  "version": 2,
-  "builds": [
-    {
-      "src": "public/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "app.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "app.py"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "public/$1"
-    }
-  ]
-}
+"routes": [
+  {
+    "src": "/(index.html)?",
+    "dest": "public/index.html"
+  },
+  {
+    "src": "/calculate_pit",
+    "dest": "app.py"
+  },
+  {
+    "src": "/calculate_cit",
+    "dest": "app.py"
+  },
+  {
+    "src": "/(.*)",
+    "dest": "public/$1"
+  }
+]

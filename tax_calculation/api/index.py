@@ -1,7 +1,12 @@
+import os
 from flask import Flask, render_template, request, jsonify
 
-# --- Initialize Flask App ---
-app = Flask(__name__, static_folder="public")
+# Correct paths
+app = Flask(
+    __name__,
+    static_folder=os.path.join(os.path.dirname(__file__), '..', 'public'),
+    template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates')
+)
 
 # --- CONSTANTS from the "Nigeria Tax Act, 2025" ---
 
@@ -123,6 +128,7 @@ def index():
     """Serves the main HTML page."""
     return render_template('index.html')
 
+
 @app.route('api/calculate_pit', methods=['POST'])
 def calculate_pit_endpoint():
     """Endpoint for PIT calculation."""
@@ -137,5 +143,15 @@ def calculate_cit_endpoint():
     results = calculate_cit_logic(data)
     return jsonify(results)
 
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+# This ensures it works on Vercel (WSGI-compatible)
+# Vercel looks for this 'app' variable
+if os.getenv("VERCEL") == "1":
+    application = app  # 👈 Vercel will serve this
+else:
+    if __name__ == '__main__':
+        app.run(debug=True)
+  

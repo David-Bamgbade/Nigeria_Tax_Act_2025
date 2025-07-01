@@ -83,12 +83,12 @@ const loader = document.querySelector('.loader-container');
 
 pitForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    await handleFormSubmit(pitForm, '/calculate_pit', displayPitResults);
+    await handleFormSubmit(pitForm, '/api/calculate_pit', displayPitResults);
 });
 
 citForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    await handleFormSubmit(citForm, '/calculate_cit', displayCitResults);
+    await handleFormSubmit(citForm, '/api/calculate_cit', displayCitResults);
 });
 
 async function handleFormSubmit(form, endpoint, displayFunction) {

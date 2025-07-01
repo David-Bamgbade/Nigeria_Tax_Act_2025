@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 
 # --- Initialize Flask App ---
-app = Flask(__name__, static_folder="public")
+app = Flask(__name__, static_folder="../public", template_folder="../public")
 
 # --- CONSTANTS from the "Nigeria Tax Act, 2025" ---
 
@@ -123,14 +123,14 @@ def index():
     """Serves the main HTML page."""
     return render_template('index.html')
 
-@app.route('/calculate_pit', methods=['POST'])
+@app.route('/api/calculate_pit', methods=['POST'])
 def calculate_pit_endpoint():
     """Endpoint for PIT calculation."""
     data = request.get_json()
     results = calculate_pit_logic(data)
     return jsonify(results)
 
-@app.route('/calculate_cit', methods=['POST'])
+@app.route('/api/calculate_cit', methods=['POST'])
 def calculate_cit_endpoint():
     """Endpoint for CIT calculation."""
     data = request.get_json()

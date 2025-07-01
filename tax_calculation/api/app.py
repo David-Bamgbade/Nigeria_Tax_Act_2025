@@ -1,9 +1,7 @@
-from flask import Flask, request, jsonify
-import logging
+from flask import Flask, render_template, request, jsonify
 
 # --- Initialize Flask App ---
-app = Flask(__name__)
-logging.basicConfig(level=logging.DEBUG)
+app = Flask(__name__, static_folder="public")
 
 # --- CONSTANTS from the "Nigeria Tax Act, 2025" ---
 
@@ -21,7 +19,7 @@ PIT_TAX_BANDS = [
 
 # For CIT (Company Income Tax)
 CIT_SMALL_COMPANY_TURNOVER_THRESHOLD = 50_000_000
-CIT_SMALL_COMPANY_FIXED_ASSETS_THRESHOLD = 250_000_000
+CIT_SMALL_COMPANY_FIXED_ASSETS_THRESHOLD = 250_000_000 # Added from Sec. 202
 CIT_RATE_LARGE_COMPANY = 0.30
 CIT_DEVELOPMENT_LEVY_RATE = 0.04
 
@@ -52,6 +50,7 @@ def calculate_pit_logic(data):
     income_to_tax = chargeable_income
     tax_breakdown = []
     
+    # Progressive tax bands logic
     if income_to_tax > 0:
         taxable_in_band = min(income_to_tax, PIT_TAX_BANDS[0]["limit"])
         tax_on_band = taxable_in_band * PIT_TAX_BANDS[0]["rate"]
@@ -84,6 +83,7 @@ def calculate_cit_logic(data):
     fixed_assets = data.get("fixed_assets", 0)
     is_prof_services = data.get("is_professional_services", 0) == 1
 
+    # Full definition of a Small Company from Section 202
     is_small_company = (
         turnover <= CIT_SMALL_COMPANY_TURNOVER_THRESHOLD and
         fixed_assets <= CIT_SMALL_COMPANY_FIXED_ASSETS_THRESHOLD and
@@ -115,42 +115,27 @@ def calculate_cit_logic(data):
         "dev_levy_percent": dev_levy_percent
     }
 
+
 # --- FLASK ROUTES (API Endpoints) ---
+
+@app.route('/')
+def index():
+    """Serves the main HTML page."""
+    return render_template('index.html')
 
 @app.route('/api/calculate_pit', methods=['POST'])
 def calculate_pit_endpoint():
     """Endpoint for PIT calculation."""
-    try:
-        data = request.get_json()
-        if not data:
-            return jsonify({"error": "No data provided"}), 400
-        results = calculate_pit_logic(data)
-        return jsonify(results)
-    except Exception as e:
-        logging.error(f"Error in calculate_pit_endpoint: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+    data = request.get_json()
+    results = calculate_pit_logic(data)
+    return jsonify(results)
 
 @app.route('/api/calculate_cit', methods=['POST'])
 def calculate_cit_endpoint():
     """Endpoint for CIT calculation."""
-    try:
-        data = request.get_json()
-        if not data:
-            return jsonify({"error": "No data provided"}), 400
-        results = calculate_cit_logic(data)
-        return jsonify(results)
-    except Exception as e:
-        logging.error(f"Error in calculate_cit_endpoint: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+    data = request.get_json()
+    results = calculate_cit_logic(data)
+    return jsonify(results)
 
-@app.route('/api/health', methods=['GET'])
-def health_check():
-    return jsonify({"status": "healthy", "message": "Tax calculator API is running"})
-
-@app.route('/', methods=['GET'])
-def root():
-    return jsonify({"message": "Nigerian Tax Calculator API", "status": "running"})
-
-# For local development
 if __name__ == '__main__':
     app.run(debug=True)

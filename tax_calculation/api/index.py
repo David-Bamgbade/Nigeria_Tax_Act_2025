@@ -1,7 +1,27 @@
 import os
 from flask import Flask, render_template, request, jsonify
 
-app = Flask(__name__, static_folder="../public", static_url_path="")
+# # Correct paths
+# app = Flask(
+#     __name__,
+#     static_folder=os.path.join(os.path.dirname(__file__), '..', 'public'),
+#     template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates')
+# )
+
+# Create Flask app with correct paths for Vercel
+app = Flask(__name__)
+
+# Configure static and template folders for Vercel deployment
+if os.getenv("VERCEL"):
+    # On Vercel, use absolute paths
+    app.static_folder = 'public'
+    app.template_folder = 'templates'
+else:
+    # Local development - use relative paths
+    app.static_folder = os.path.join(os.path.dirname(__file__), '..', 'public')
+    app.template_folder = os.path.join(os.path.dirname(__file__), '..', 'templates')
+
+
 
 # --- CONSTANTS from the "Nigeria Tax Act, 2025" ---
 

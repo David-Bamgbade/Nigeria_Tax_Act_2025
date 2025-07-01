@@ -1,12 +1,7 @@
 import os
 from flask import Flask, render_template, request, jsonify
 
-# Correct paths
-app = Flask(
-    __name__,
-    static_folder=os.path.join(os.path.dirname(__file__), '..', 'public'),
-    template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates')
-)
+app = Flask(__name__, static_folder="../public", static_url_path="")
 
 # --- CONSTANTS from the "Nigeria Tax Act, 2025" ---
 

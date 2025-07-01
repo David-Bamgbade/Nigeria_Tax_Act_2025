@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
-import json
+import logging
 
 # --- Initialize Flask App ---
 app = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 # --- CONSTANTS from the "Nigeria Tax Act, 2025" ---
 
@@ -51,7 +52,6 @@ def calculate_pit_logic(data):
     income_to_tax = chargeable_income
     tax_breakdown = []
     
-    # Progressive tax bands logic
     if income_to_tax > 0:
         taxable_in_band = min(income_to_tax, PIT_TAX_BANDS[0]["limit"])
         tax_on_band = taxable_in_band * PIT_TAX_BANDS[0]["rate"]
@@ -84,7 +84,6 @@ def calculate_cit_logic(data):
     fixed_assets = data.get("fixed_assets", 0)
     is_prof_services = data.get("is_professional_services", 0) == 1
 
-    # Full definition of a Small Company from Section 202
     is_small_company = (
         turnover <= CIT_SMALL_COMPANY_TURNOVER_THRESHOLD and
         fixed_assets <= CIT_SMALL_COMPANY_FIXED_ASSETS_THRESHOLD and
@@ -128,6 +127,7 @@ def calculate_pit_endpoint():
         results = calculate_pit_logic(data)
         return jsonify(results)
     except Exception as e:
+        logging.error(f"Error in calculate_pit_endpoint: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/calculate_cit', methods=['POST'])
@@ -140,20 +140,16 @@ def calculate_cit_endpoint():
         results = calculate_cit_logic(data)
         return jsonify(results)
     except Exception as e:
+        logging.error(f"Error in calculate_cit_endpoint: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
     return jsonify({"status": "healthy", "message": "Tax calculator API is running"})
 
-# Root route
 @app.route('/', methods=['GET'])
 def root():
     return jsonify({"message": "Nigerian Tax Calculator API", "status": "running"})
-
-# Vercel serverless function handler
-def handler(request):
-    return app(request.environ, lambda status, headers: None)
 
 # For local development
 if __name__ == '__main__':

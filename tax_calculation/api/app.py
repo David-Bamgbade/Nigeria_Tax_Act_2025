@@ -123,14 +123,14 @@ def index():
     """Serves the main HTML page."""
     return render_template('index.html')
 
-@app.route('/api/calculate_pit', methods=['POST'])
+@app.route('api/calculate_pit', methods=['POST'])
 def calculate_pit_endpoint():
     """Endpoint for PIT calculation."""
     data = request.get_json()
     results = calculate_pit_logic(data)
     return jsonify(results)
 
-@app.route('/api/calculate_cit', methods=['POST'])
+@app.route('api/calculate_cit', methods=['POST'])
 def calculate_cit_endpoint():
     """Endpoint for CIT calculation."""
     data = request.get_json()
